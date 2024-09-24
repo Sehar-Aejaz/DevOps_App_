@@ -17,28 +17,29 @@ pipeline {
         }
 
         // Stage 2: Install dependencies
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
                 withEnv(['PATH+EXTRA=/usr/sbin:/usr/bin:/sbin:/bin']) {
-      sh 'npm install'
-    }
-                //script {
-                //    sh 'npm install'
-                //}
-            }
-        }
-        stage('Install dependencies') {
-            steps {
-                sh 'npm install supertest --save-dev'
+                    script {
+                        // Use Node.js to install dependencies
+                        def npmInstall = "npm install"
+                        def proc = bat(script: npmInstall, returnStdout: true)
+                        echo proc
+                    }
+                }
             }
         }
 
         // Stage 3: Run tests using Jest
         stage('Test') {
             steps {
-                sh 'npm install jest --save-dev'  // Ensures jest is installed
                 script {
-                    sh 'npm test'
+                    // Ensure Jest is installed
+                    bat 'npm install jest --save-dev'
+                    
+                    // Run tests
+                    def testResult = bat(script: 'npm test', returnStdout: true)
+                    echo testResult
                 }
             }
         }
@@ -48,7 +49,7 @@ pipeline {
             steps {
                 script {
                     // Example of Docker-based deployment
-                    sh '''
+                    bat '''
                         docker build -t Jenkins-HD:test .
                         docker run -d -p 3000:3000 Jenkins-HD:test
                     '''
@@ -62,7 +63,7 @@ pipeline {
             steps {
                 script {
                     // Release to production environment
-                    sh '''
+                    bat '''
                         docker tag Jenkins-HD:test Jenkins-HD:latest
                         docker push Jenkins-HD:latest
                     '''
@@ -81,3 +82,4 @@ pipeline {
         }
     }
 }
+
