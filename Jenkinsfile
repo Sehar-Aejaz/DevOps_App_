@@ -4,6 +4,7 @@ pipeline {
     environment {
         NODE_ENV = 'production'
     }
+    
     tools {
         nodejs "NodeJS_14" // Use the NodeJS version you configured
     }
@@ -18,18 +19,21 @@ pipeline {
 
         // Stage 2: Install dependencies
         stage('Build') {
+            steps {
                 script {
                     sh 'npm install'
                 }
             }
         }
+        
+        // Stage 3: Install supertest dependency
         stage('Install dependencies') {
             steps {
                 sh 'npm install supertest --save-dev'
             }
         }
 
-        // Stage 3: Run tests using Jest
+        // Stage 4: Run tests using Jest
         stage('Test') {
             steps {
                 sh 'npm install jest --save-dev'  // Ensures jest is installed
@@ -39,7 +43,7 @@ pipeline {
             }
         }
 
-        // Stage 4: Deploy to a test environment
+        // Stage 5: Deploy to a test environment
         stage('Deploy to Test Environment') {
             steps {
                 script {
@@ -53,7 +57,7 @@ pipeline {
             }
         }
 
-        // Stage 5: Release to production (Optional)
+        // Stage 6: Release to production (Optional)
         stage('Release to Production') {
             steps {
                 script {
