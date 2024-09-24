@@ -4,6 +4,9 @@ pipeline {
     environment {
         NODE_ENV = 'production'
     }
+    tools {
+        nodejs "NodeJS_14" // Use the NodeJS version you configured
+    }
 
     stages {
         // Stage 1: Checkout code from Git
