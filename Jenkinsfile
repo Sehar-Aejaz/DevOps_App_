@@ -28,6 +28,7 @@ pipeline {
         // Stage 3: Run tests using Jest
         stage('Test') {
             steps {
+                sh 'npm install jest --save-dev'  // Ensures jest is installed
                 script {
                     sh 'npm test'
                 }
