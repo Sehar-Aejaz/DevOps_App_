@@ -24,6 +24,11 @@ pipeline {
                 }
             }
         }
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install supertest --save-dev'
+            }
+        }
 
         // Stage 3: Run tests using Jest
         stage('Test') {
