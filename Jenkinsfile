@@ -19,9 +19,12 @@ pipeline {
         // Stage 2: Install dependencies
         stage('Build') {
             steps {
-                script {
-                    sh 'npm install'
-                }
+                withEnv(['PATH+EXTRA=/usr/sbin:/usr/bin:/sbin:/bin']) {
+      sh 'npm install'
+    }
+                //script {
+                //    sh 'npm install'
+                //}
             }
         }
         stage('Install dependencies') {
