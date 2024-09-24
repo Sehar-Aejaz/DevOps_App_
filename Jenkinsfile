@@ -1,43 +1,71 @@
 pipeline {
-    agent any // Use any available agent
+    agent any
+
+    environment {
+        NODE_ENV = 'production'
+    }
 
     stages {
+        // Stage 1: Checkout code from Git
         stage('Checkout') {
             steps {
-                // Checkout the code from Git
-                git 'https://github.com/Sehar-Aejaz/Jenkins-HD.git'
+                git branch: 'main', url: 'https://github.com/Sehar-Aejaz/Jenkins-HD'
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                // Run a shell command to install dependencies
-                sh 'npm install' // or any other command for dependency installation
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                // Run tests using a shell command
-                sh 'npm test' // Replace with your test command
-            }
-        }
-
+        // Stage 2: Install dependencies
         stage('Build') {
             steps {
-                // Build the project using a shell command
-                sh 'npm run build' // Replace with your build command
+                script {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        // Stage 3: Run tests using Jest
+        stage('Test') {
+            steps {
+                script {
+                    sh 'npm test'
+                }
+            }
+        }
+
+        // Stage 4: Deploy to a test environment
+        stage('Deploy to Test Environment') {
+            steps {
+                script {
+                    // Example of Docker-based deployment
+                    sh '''
+                        docker build -t Jenkins-HD:test .
+                        docker run -d -p 3000:3000 Jenkins-HD:test
+                    '''
+                    // If not using Docker, deploy the app to a staging server or environment here.
+                }
+            }
+        }
+
+        // Stage 5: Release to production (Optional)
+        stage('Release to Production') {
+            steps {
+                script {
+                    // Release to production environment
+                    sh '''
+                        docker tag Jenkins-HD:test Jenkins-HD:latest
+                        docker push Jenkins-HD:latest
+                    '''
+                    // Alternatively, deploy the app to a live production server.
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline completed successfully'
         }
         failure {
-            echo 'Pipeline failed. Please check the logs.'
+            echo 'Pipeline failed'
         }
     }
 }
-
