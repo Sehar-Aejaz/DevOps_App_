@@ -44,6 +44,12 @@ pipeline {
         stage('Deploy to Test Environment') {
             steps {
                 script {
+                    // Check Docker version
+                    sh 'docker --version'
+                }
+            }
+            steps {
+                script {
                     // Example of Docker-based deployment
                     sh '''
                         docker build -t Jenkins-HD:test .
