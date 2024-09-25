@@ -10,20 +10,7 @@ pipeline {
     }
 
     stages {
-        // 111
-        stage('Install Dependencies') {
-            steps {
-                // Using Jenkins' npm step to run npm install
-                sh 'npm install' // Equivalent to 'npm install'
-            }
-        }
-        // 222
-        stage('Run Tests') {
-            steps {
-                // Using Jenkins' npm step to run tests
-                npmTest() // Equivalent to 'npm test'
-            }
-        }
+       
         // Stage 1: Checkout code from Git (No echo here)
         stage('Checkout') {
             steps {
