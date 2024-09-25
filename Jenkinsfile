@@ -21,7 +21,12 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo 'Executing command: sh \'npm install\''
+                    echo 'Building the project with Maven...'
+                    mvn 'package' // Build the project and create a JAR file
+                    echo 'Creating a JAR file artifact...'
+                    
+                    // Archive the JAR file as a build artifact
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
                 }
             }
         }
