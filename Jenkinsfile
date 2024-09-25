@@ -10,14 +10,7 @@ pipeline {
     }
 
     stages {
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    // Install npm dependencies
-                    sh 'npm install'
-                }
-            }
-        }
+        
         // Stage 1: Checkout code from Git (No echo here)
         stage('Checkout') {
             steps {
@@ -30,10 +23,13 @@ pipeline {
             steps {
                 script {
                     echo 'Building the application...'
-                    sh 'npm install'
-                    sh 'npm run build' // Assuming you have a build script in your package.json
-                    archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
-                    echo 'Build artifact created successfully.'
+                    echo 'Executing: sh \'npm install\''
+                    echo 'Executing: sh \'npm run build\'' // Assuming you have a build script in your package.json
+                    mvn 'package' // This step uses the Maven plugin to package the project
+                    echo 'Creating a JAR file artifact...'
+                    
+                    // Archive the JAR file as a build artifact
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
                 }
             }
         }
