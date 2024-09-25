@@ -21,16 +21,11 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo 'Building the Docker image...'
-                    // Build the Docker image
-                    sh '''
-                        docker build -t myapp:latest .
-                    '''
-                    
-                    echo 'Docker image built successfully.'
-                    
-                    // Optionally, you can push the image to a Docker registry
-                    // sh 'docker push myapp:latest'
+                    echo 'Building the application...'
+                    sh 'npm install'
+                    sh 'npm run build' // Assuming you have a build script in your package.json
+                    archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                    echo 'Build artifact created successfully.'
                 }
             }
         }
