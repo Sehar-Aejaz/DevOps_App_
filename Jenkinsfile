@@ -10,7 +10,20 @@ pipeline {
     }
 
     stages {
-        
+        // 111
+        stage('Install Dependencies') {
+            steps {
+                // Using Jenkins' npm step to run npm install
+                npmInstall() // Equivalent to 'npm install'
+            }
+        }
+        // 222
+        stage('Run Tests') {
+            steps {
+                // Using Jenkins' npm step to run tests
+                npmTest() // Equivalent to 'npm test'
+            }
+        }
         // Stage 1: Checkout code from Git (No echo here)
         stage('Checkout') {
             steps {
@@ -77,6 +90,9 @@ pipeline {
     }
 
     post {
+        always {
+            junit '**/test-results.xml'  // Collect test results if they are in JUnit XML format
+        }
         success {
             echo 'Pipeline completed successfully'
         }
