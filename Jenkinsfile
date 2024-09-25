@@ -21,12 +21,16 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo 'Building the project with Maven...'
-                    mvn 'package' // Build the project and create a JAR file
-                    echo 'Creating a JAR file artifact...'
+                    echo 'Building the Docker image...'
+                    // Build the Docker image
+                    sh '''
+                        docker build -t myapp:latest .
+                    '''
                     
-                    // Archive the JAR file as a build artifact
-                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                    echo 'Docker image built successfully.'
+                    
+                    // Optionally, you can push the image to a Docker registry
+                    // sh 'docker push myapp:latest'
                 }
             }
         }
