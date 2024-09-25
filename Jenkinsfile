@@ -14,7 +14,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Using Jenkins' npm step to run npm install
-                npmInstall() // Equivalent to 'npm install'
+                sh 'npm install' // Equivalent to 'npm install'
             }
         }
         // 222
