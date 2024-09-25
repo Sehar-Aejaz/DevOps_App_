@@ -29,7 +29,7 @@ pipeline {
                     echo 'Creating a JAR file artifact...'
                     
                     // Archive the JAR file as a build artifact
-                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                    echo 'archiveArtifacts artifacts: \'target/*.jar\', fingerprint: true'
                 }
             }
         }
