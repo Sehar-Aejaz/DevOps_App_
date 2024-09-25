@@ -10,6 +10,14 @@ pipeline {
     }
 
     stages {
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install npm dependencies
+                    sh 'npm install'
+                }
+            }
+        }
         // Stage 1: Checkout code from Git (No echo here)
         stage('Checkout') {
             steps {
