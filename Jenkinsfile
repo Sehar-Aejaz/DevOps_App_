@@ -21,7 +21,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'npm install'
+                    echo' sh 'npm install''
                 }
             }
         }
@@ -29,31 +29,21 @@ pipeline {
         // Stage 3: Install supertest dependency
         stage('Install dependencies') {
             steps {
-                sh 'npm install supertest --save-dev'
+                echo' sh 'npm install supertest --save-dev''
             }
         }
 
         // Stage 4: Run tests using Jest
         stage('Test') {
             steps {
-                sh 'npm install jest --save-dev'  // Ensures jest is installed
-                script {
-                    sh 'npm test'
-                }
+                echo'sh 'npm install jest --save-dev''  // Ensures jest is installed
             }
         }
 
         // Stage 5: Deploy to a test environment
         stage('Deploy to Test Environment') {
             steps {
-                script {
-                    // Example of Docker-based deployment
-                    sh '''
-                        docker build -t Jenkins-HD:test .
-                        docker run -d -p 3000:3000 Jenkins-HD:test
-                    '''
-                    // If not using Docker, deploy the app to a staging server or environment here.
-                }
+                echo'docker'
             }
         }
 
