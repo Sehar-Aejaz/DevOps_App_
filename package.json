@@ -1,8 +1,15 @@
 {
-  "name": "my-web-app",
-  "version": "1.0.0",
+  "name": "NodeJS_14",
+  "version": "22.9.0",
+  "installSource": "nodejs.org",
   "description": "A simple Node.js application with Express",
   "main": "src/index.js",
+  "globalNpmPackages": [
+    "express@latest",
+    "nodemon@latest",
+    "typescript@latest"
+  ],
+  "globalNpmRefreshHours": 72,
   "scripts": {
     "start": "node src/index.js",
     "test": "jest",
@@ -14,6 +21,6 @@
   "devDependencies": {
     "jest": "^27.0.6"
   },
-  "author": "Your Name",
+  "author": "Sehar Aejaz",
   "license": "ISC"
 }
