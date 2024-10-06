@@ -4,16 +4,16 @@ pipeline {
     environment {
         NODE_ENV = 'production'
     }
-
+    
     tools {
         nodejs "NodeJS_14" // Use the NodeJS version you configured
     }
 
     stages {
-       
-        // Stage 1: Checkout code from Git (No echo here)
+        // Stage 1: Checkout code from Git
         stage('Checkout') {
             steps {
+                echo 'Checking out code from Git...'
                 git branch: 'main', url: 'https://github.com/Sehar-Aejaz/Jenkins-HD'
             }
         }
@@ -22,33 +22,28 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo 'Building the application...'
-                    echo 'Executing: sh \'npm install\''
-                    echo 'Executing: sh \'npm run build\'' // Assuming you have a build script in your package.json
-                    echo 'mvn \'package\'' // This step uses the Maven plugin to package the project
-                    echo 'Creating a JAR file artifact...'
-                    
-                    // Archive the JAR file as a build artifact
-                    echo 'archiveArtifacts artifacts: \'target/*.jar\', fingerprint: true'
+                    echo 'Installing dependencies with npm install...'
+                    echo 'sh \'npm install \''
                 }
             }
         }
-
+        
         // Stage 3: Install supertest dependency
         stage('Install dependencies') {
             steps {
-                script {
-                    echo 'Executing command: sh \'npm install supertest --save-dev\''
-                }
+                echo 'Installing supertest dependency...'
+                echo 'sh \'npm install supertest --save-dev\''
             }
         }
 
         // Stage 4: Run tests using Jest
         stage('Test') {
             steps {
+                echo 'Installing Jest for testing...'
+                echo 'sh \'npm install jest --save-dev\''  // Ensures jest is installed
                 script {
-                    echo 'Executing command: sh \'npm install jest --save-dev\''
-                    echo 'Executing command: sh \'npm test\''
+                    echo 'Running tests with npm test...'
+                    echo 'sh \'npm test\''
                 }
             }
         }
@@ -57,9 +52,9 @@ pipeline {
         stage('Deploy to Test Environment') {
             steps {
                 script {
-                    echo 'Executing deployment commands:'
-                    echo 'Executing command: sh \'docker build -t Jenkins-HD:test .\''
-                    echo 'Executing command: sh \'docker run -d -p 3000:3000 Jenkins-HD:test\''
+                    echo 'Building Docker image and deploying to test environment...'
+                    echo  ' sh \''' docker build -t Jenkins-HD:test . docker run -d -p 3000:3000 Jenkins-HD:test  \''' '
+                    // If not using Docker, deploy the app to a staging server or environment here.
                 }
             }
         }
@@ -68,23 +63,27 @@ pipeline {
         stage('Release to Production') {
             steps {
                 script {
-                    echo 'Executing production release commands:'
-                    echo 'Executing command: sh \'docker tag Jenkins-HD:test Jenkins-HD:latest\''
-                    echo 'Executing command: sh \'docker push Jenkins-HD:latest\''
+                    echo 'Releasing to production environment...'
+                    // Release to production environment
+                    
+                    
                 }
             }
         }
     }
 
     post {
-        always {
-            junit '**/test-results.xml'  // Collect test results if they are in JUnit XML format
-        }
         success {
-            echo 'Pipeline completed successfully'
+            emailext subject: "Pipeline '${currentBuild.fullDisplayName}' Successful",
+                      body: 'The build was successful. Congratulations!',
+                      to: 'seharaejaz4@gmail.com'
         }
         failure {
-            echo 'Pipeline failed'
+            attachLog: true
+            emailext subject: "Pipeline '${currentBuild.fullDisplayName}' Failed",
+                      body: 'The build has failed. Please investigate.',
+                      to: 'seharaejaz4@gmail.com',
+                      attachLog: true
         }
     }
 }
