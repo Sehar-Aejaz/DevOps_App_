@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker image and deploying to test environment...'
-                    echo  ' sh \''' docker build -t Jenkins-HD:test . docker run -d -p 3000:3000 Jenkins-HD:test  \''' '
+                    
                     // If not using Docker, deploy the app to a staging server or environment here.
                 }
             }
